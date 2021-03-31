@@ -28,7 +28,7 @@ class CatTargetPredFeatureTable(Widget):
             return self.wi
         raise ValueError("neither target nor prediction data provided")
 
-    def calculate(self, reference_data: pd.DataFrame, production_data: pd.DataFrame, column_mapping): 
+    def calculate(self, reference_data: pd.DataFrame, production_data: pd.DataFrame, column_mapping):
         if column_mapping:
             date_column = column_mapping.get('datetime')
             id_column = column_mapping.get('id')
@@ -38,14 +38,14 @@ class CatTargetPredFeatureTable(Widget):
             if num_feature_names is None:
                 num_feature_names = []
             else:
-                num_feature_names = [name for name in num_feature_names if is_numeric_dtype(reference_data[name])] 
+                num_feature_names = [name for name in num_feature_names if is_numeric_dtype(reference_data[name])]
 
             cat_feature_names = column_mapping.get('categorical_features')
             if cat_feature_names is None:
                 cat_feature_names = []
             else:
-                cat_feature_names = [name for name in cat_feature_names if is_numeric_dtype(reference_data[name])] 
-        
+                cat_feature_names = [name for name in cat_feature_names if is_numeric_dtype(reference_data[name])]
+
         else:
             date_column = 'datetime' if 'datetime' in reference_data.columns else None
             id_column = None
@@ -57,10 +57,10 @@ class CatTargetPredFeatureTable(Widget):
             num_feature_names = list(set(reference_data.select_dtypes([np.number]).columns) - set(utility_columns))
             cat_feature_names = list(set(reference_data.select_dtypes([np.object]).columns) - set(utility_columns))
 
-        if prediction_column is not None and target_column is not None:           
+        if prediction_column is not None and target_column is not None:
             additional_graphs_data = []
             params_data = []
-            for feature_name in num_feature_names + cat_feature_names: 
+            for feature_name in num_feature_names + cat_feature_names:
                 #add data for table in params
                 params_data.append(
                     {
@@ -86,7 +86,7 @@ class CatTargetPredFeatureTable(Widget):
                 production_data['dataset'] = 'Current'
                 merged_data = pd.concat([reference_data, production_data])
 
-                target_fig = px.histogram(merged_data, x=feature_name, color=target_column, facet_col="dataset",
+                target_fig = px.histogram(merged_data, x=feature_name, color=target_column, facet_col="dataset", histnorm='probability',
                     category_orders={"dataset": ["Reference", "Current"]})
 
                 target_fig_json  = json.loads(target_fig.to_json())
@@ -104,7 +104,7 @@ class CatTargetPredFeatureTable(Widget):
                         {
                             "data" : target_fig_json['data'],
                             "layout" : target_fig_json['layout']
-                        }, 
+                        },
                     )
                 )
 
@@ -114,7 +114,7 @@ class CatTargetPredFeatureTable(Widget):
                         {
                             "data" : pred_fig_json['data'],
                             "layout" : pred_fig_json['layout']
-                        }, 
+                        },
                     )
                 )
 
@@ -143,7 +143,7 @@ class CatTargetPredFeatureTable(Widget):
         elif target_column is not None:
             additional_graphs_data = []
             params_data = []
-            for feature_name in num_feature_names + cat_feature_names: 
+            for feature_name in num_feature_names + cat_feature_names:
                 #add data for table in params
                 params_data.append(
                     {
@@ -177,7 +177,7 @@ class CatTargetPredFeatureTable(Widget):
                         {
                             "data" : target_fig_json['data'],
                             "layout" : target_fig_json['layout']
-                        }, 
+                        },
                     )
                 )
 
@@ -205,7 +205,7 @@ class CatTargetPredFeatureTable(Widget):
         elif prediction_column is not None:
             additional_graphs_data = []
             params_data = []
-            for feature_name in num_feature_names + cat_feature_names: 
+            for feature_name in num_feature_names + cat_feature_names:
                 #add data for table in params
                 params_data.append(
                     {
@@ -239,7 +239,7 @@ class CatTargetPredFeatureTable(Widget):
                         {
                             "data" : prediction_fig_json['data'],
                             "layout" : prediction_fig_json['layout']
-                        }, 
+                        },
                     )
                 )
 
@@ -263,10 +263,7 @@ class CatTargetPredFeatureTable(Widget):
                     "data": params_data
                 },
                 additionalGraphs=additional_graphs_data
-            )            
+            )
 
         else:
             self.wi = None
-
-        
-
