@@ -86,7 +86,7 @@ class CatTargetPredFeatureTable(Widget):
                 production_data['dataset'] = 'Current'
                 merged_data = pd.concat([reference_data, production_data])
 
-                target_fig = px.histogram(merged_data, x=feature_name, color=target_column, facet_col="dataset", histnorm='probability',
+                target_fig = px.histogram(merged_data, x=feature_name, color=target_column, facet_col="dataset", histnorm='percent',
                     category_orders={"dataset": ["Reference", "Current"]})
 
                 target_fig_json  = json.loads(target_fig.to_json())
@@ -165,7 +165,7 @@ class CatTargetPredFeatureTable(Widget):
                 production_data['dataset'] = 'Current'
                 merged_data = pd.concat([reference_data, production_data])
 
-                target_fig = px.histogram(merged_data, x=feature_name, color=target_column, facet_col="dataset",histnorm='probability',
+                target_fig = px.histogram(merged_data, x=feature_name, color=target_column, facet_col="dataset",histnorm='percent',
                     category_orders={"dataset": ["Reference", "Current"]})
 
                 target_fig_json  = json.loads(target_fig.to_json())
